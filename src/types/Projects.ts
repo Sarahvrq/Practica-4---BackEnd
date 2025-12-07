@@ -1,8 +1,11 @@
 import { ObjectId } from "mongodb"
 
-export type VideoGame = {
-    _id?: string;
-    name: string;
-    platform: string;
-    date: Date;
+export type Projects = {
+    _id: ObjectId
+    name: String,
+    description: String,
+    startDate: Date,
+    endDate: Date, 
+    owner: ObjectId,
+    members: [ObjectId]
 }

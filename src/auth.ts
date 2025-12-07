@@ -2,10 +2,10 @@ import dotenv from 'dotenv';
 import jwt from "jsonwebtoken";
 import { getDB } from './db/mongo';
 import { ObjectId } from 'mongodb';
+import { AuthPayload } from './types/AuthPL'
 
 
 dotenv.config()
-
 
 const SUPER_SECRETO = process.env.SECRET;
 
@@ -24,7 +24,7 @@ export const getUserFromToken = async (token: string) => {
     const payload = verifyToken(token);
     if(!payload) return null;
     const db = getDB();
-    return await db.collection("usersVideoGames").findOne({
-        _id: new ObjectId(payload.userId)
+    return await db.collection("usersProjects").findOne({
+        _id: new ObjectId(payload.userId.toString())
     })
 }

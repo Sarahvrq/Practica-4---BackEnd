@@ -1,17 +1,17 @@
 import { ObjectId } from "mongodb";
 import { getDB } from "../db/mongo"
 import { IResolvers } from "@graphql-tools/utils";
-import { UserVideoGame } from "../types/Users";
+import { UserProjects } from "../types/Users";
 import { createUser, validateUser } from "../collections/usersVideoGames";
 import { signToken } from "../auth";
 import { VideoGame } from "../types/Projects";
 
-const nameCollection = "VideoGames";
-const COLLECTION_USERS = "usersVideoGames";
+const nameCollection = "Projects";
+const COLLECTION_USERS = "usersProjects";
 
 export const resolvers: IResolvers = {
   Query: {
-    videoGames: async () => {
+    Projects: async () => {
       const db = getDB();
       return db.collection(nameCollection).find().toArray();
     },
