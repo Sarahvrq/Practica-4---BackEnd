@@ -1,8 +1,6 @@
 import { ObjectId } from "mongodb"
 
-
-
-export type UserVideoGame = {
+export type Users= {
   _id: ObjectId;
   email: string;
   videoGameLibrary: string[];

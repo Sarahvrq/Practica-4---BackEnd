@@ -4,7 +4,7 @@ import { IResolvers } from "@graphql-tools/utils";
 import { UserVideoGame } from "../types/Users";
 import { createUser, validateUser } from "../collections/usersVideoGames";
 import { signToken } from "../auth";
-import { VideoGame } from "../types/VideoGame";
+import { VideoGame } from "../types/Projects";
 
 const nameCollection = "VideoGames";
 const COLLECTION_USERS = "usersVideoGames";
