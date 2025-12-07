@@ -5,7 +5,7 @@ dotenv.config();
 
 let client: MongoClient;
 let dB: Db;
-const dbName = "Vicio";
+const dbName = "Practica4-2526";
 
 export const connectToMongoDB = async () => {
     try{
@@ -13,10 +13,10 @@ export const connectToMongoDB = async () => {
         client = new MongoClient(mongoUrl!);
         await client.connect();
         dB = client.db(dbName);
-        console.log("Estás conectado al mondongo cosa guapa!");
+        console.log("EXITO conectando a MongoDB");
     }
     catch(err){
-        console.log("Error del mondongo baby: ", err)
+        console.log("ERROR MongoDB: ", err)
     }
 };
 
@@ -27,6 +27,6 @@ export const closeMongoDB = async () => {
     try{
         client && await client.close();
     } catch(err){
-        console.log("Error cerrando el mondongo baby: ", err)
+        console.log("ERROR cerrando MongoDB: ", err)
     }
 }
