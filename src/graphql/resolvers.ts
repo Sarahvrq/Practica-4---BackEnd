@@ -2,7 +2,7 @@ import { ObjectId } from "mongodb";
 import { getDB } from "../db/mongo"
 import { IResolvers } from "@graphql-tools/utils";
 import { UserProjects } from "../types/Users";
-import { createUser, validateUser } from "../collections/usersVideoGames";
+import { createUser, validateUser } from "../COLLECTIONS/usersVideoGames";
 import { signToken } from "../auth";
 import { VideoGame } from "../types/Projects";
 
