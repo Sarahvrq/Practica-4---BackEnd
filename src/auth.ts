@@ -1,8 +1,8 @@
 import dotenv from 'dotenv';
 import jwt from "jsonwebtoken";
-import { getDB } from './db/mongo';
+import { getDB } from './DB/mongo';
 import { ObjectId } from 'mongodb';
-import { AuthPayload } from './types/AuthPL'
+import { AuthPayload } from './TYPES/AuthPL'
 
 
 dotenv.config()
