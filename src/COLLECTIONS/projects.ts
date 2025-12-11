@@ -45,34 +45,6 @@ export const getAllProjects = async (page?: number, size?: number) => {
     .toArray();
 };
 
-export const addMemberToProject = async (
-  projectId: string,
-  userId: string,
-  requestingUserId: string
-): Promise<any> => {
-  const db = getDB();
-
-  // Verify that the requesting user is the project owner
-  const project = await getProjectById(projectId);
-  if (!project) throw new Error("Project not found");
-
-  const projectOwner = project.owner.toString();
-  if (projectOwner !== requestingUserId) {
-    throw new Error("Only the project owner can add members");
-  }
-
-  // Add the user to members array
-  const result = await db
-    .collection(PROJECT_COLLECTION)
-    .findOneAndUpdate(
-      { _id: new ObjectId(projectId) },
-      { $addToSet: { members: new ObjectId(userId) } },
-      { returnDocument: "after" }
-    );
-
-  return result?.value;
-};
-
 export const updateProject = async (projectId: string, updates: { name?: string; description?: string; startDate?: Date; endDate?: Date }) => {
   const db = getDB();
 
