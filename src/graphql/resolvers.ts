@@ -1,104 +1,98 @@
 import { ObjectId } from "mongodb";
-import { getDB } from "../db/mongo"
 import { IResolvers } from "@graphql-tools/utils";
-import { UserVideoGame } from "../types/Users";
-import { createUser, validateUser } from "../collections/usersVideoGames";
-import { signToken } from "../auth";
-import { VideoGame } from "../types/VideoGame";
-
-const nameCollection = "VideoGames";
-const COLLECTION_USERS = "usersVideoGames";
+import {
+  createUser,
+  validateUser,
+  getUserById,
+  getAllUsers,
+} from "../COLLECTIONS/users";
+import {
+  createProject,
+  getProjectById,
+  getProjectsByOwner,
+  addMemberToProject,
+  updateProject,
+} from "../COLLECTIONS/projects";
+import {
+  createTask,
+  getTasksByProject,
+  updateTaskStatus,
+} from "../COLLECTIONS/tasks";
 
 export const resolvers: IResolvers = {
   Query: {
-    videoGames: async () => {
-      const db = getDB();
-      return db.collection(nameCollection).find().toArray();
-    },
-
-    videoGame: async (_, { id }) => {
-      const db = getDB();
-      return db.collection(nameCollection).findOne({ _id: new ObjectId(id) });
-    },
     me: async (_, __, { user }) => {
       if (!user) return null;
-      return {
-        _id: user._id.toString(),
-        email: user.email,
-        videoGameLibrary: user.videoGameLibrary || [],
-      };
+      return getUserById(user._id.toString());
     },
-  },
 
-  User: {
-    videoGameLibrary: async (parent: UserVideoGame) => {
-      const db = getDB();
-      const listaDeIdsDeVideojuegos = parent.videoGameLibrary;
-      const objectIds = listaDeIdsDeVideojuegos.map((id) => new ObjectId(id));
-      return db
-        .collection(nameCollection)
-        .find({ _id: { $in: objectIds } })
-        .toArray();
+    users: async () => {
+      return getAllUsers();
+    },
+
+    myProjects: async (_, __, { user }) => {
+      if (!user) throw new Error("You must be logged in");
+      return getProjectsByOwner(user._id.toString());
+    },
+
+    projectDetails: async (_, { projectId }) => {
+      return getProjectById(projectId);
     },
   },
 
   Mutation: {
-    addVideoGame: async (_, { name, platform, date }) => {
-      const db = getDB();
-      const result = await db.collection(nameCollection).insertOne({
-        name,
-        platform,
-        date,
-      });
-      return {
-        _id: result.insertedId,
-        name,
-        platform,
-        date,
-      };
-    },
-    register: async (
-      _,
-      { email, password }: { email: string; password: string }
-    ) => {
+    register: async (_, { input: { email, password } }) => {
       const userId = await createUser(email, password);
-      return signToken(userId);
+      return { userId };
     },
-    login: async (
-      _,
-      { email, password }: { email: string; password: string }
-    ) => {
+
+    login: async (_, { input: { email, password } }) => {
       const user = await validateUser(email, password);
       if (!user) throw new Error("Invalid credentials");
-      return signToken(user._id.toString());
+      return { userId: (user._id as ObjectId).toString() };
     },
-    addVideoGameToMyLibrary: async (
-      _,
-      { videoGameId }: { videoGameId: string },
-      { user }
-    ) => {
-      if (!user) throw new Error("No eres nadie Juan de las Nieves");
-      const db = getDB();
-      const userId = new ObjectId(user._id);
-      const videoGameIdObjetitoMongo = new ObjectId(videoGameId);
 
-      const videoGame = await db
-        .collection(nameCollection)
-        .findOne({ _id: videoGameIdObjetitoMongo });
-      if (!videoGame) throw new Error("El videojuego no existe");
+    createProject: async (_,{ input: { name, description, startDate, endDate, owner, members } }) => {
 
-      await db.collection(COLLECTION_USERS).updateOne(
-        { _id: userId },
-        {
-          $addToSet: { videoGameLibrary: videoGameId },
-        }
+      return createProject(
+        name,
+        description,
+        startDate,
+        endDate,
+        owner,
+        members
       );
+    },
 
-      const updateUser = await db.collection(COLLECTION_USERS).findOne({
-        _id: userId,
-      });
+    addMember: async (_, { projectId, userId }, { user }) => {
+      if (!user) throw new Error("You must be logged in");
+      return addMemberToProject(projectId, userId, user._id.toString());
+    },
 
-      return updateUser;
+    createTask: async (_, { projectId, input }) => {
+      const { title, assignedTo, status, priority, dueDate } = input;
+      return createTask(
+        title,
+        projectId,
+        assignedTo,
+        status,
+        priority,
+        dueDate
+      );
+    },
+
+    updateProject: async (_, { id, input }) => {
+      return updateProject(id, input);
+    },
+
+    updateTask: async (_, { id, status }) => {
+      return updateTaskStatus(id, status);
+    },
+  },
+
+  Project: {
+    Tasks: async (parent: any) => {
+      return await getTasksByProject(parent._id.toString());
     },
   },
 };

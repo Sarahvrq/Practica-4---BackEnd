@@ -1,9 +1,9 @@
-import { ObjectId } from "mongodb"
+import { ObjectId } from "mongodb";
 
-
-
-export type UserVideoGame = {
-  _id: ObjectId;
+export type Users = {
+  _id?: ObjectId;
+  username: string;
   email: string;
-  videoGameLibrary: string[];
+  password: string;
+  createdAt: Date;
 };

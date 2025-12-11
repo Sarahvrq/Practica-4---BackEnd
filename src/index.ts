@@ -1,7 +1,7 @@
 import { ApolloServer } from "apollo-server";
-import { connectToMongoDB } from "./db/mongo"
-import { typeDefs } from "./graphql/schema";
-import { resolvers } from "./graphql/resolvers";
+import { connectToMongoDB } from "./DB/mongo"
+import { typeDefs } from "./GRAPHQL/schema";
+import { resolvers } from "./GRAPHQL/resolvers";
 import { getUserFromToken } from "./auth";
 
 const start = async () => {
@@ -17,8 +17,8 @@ const start = async () => {
     },
   });
 
-  await server.listen({ port: 4000 });
-  console.log("GQL sirviendo y de to");
+  await server.listen({ port: 4003 });
+  console.log("GQL sirviendo");
 };
 
 
