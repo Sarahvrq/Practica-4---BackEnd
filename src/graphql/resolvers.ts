@@ -10,7 +10,6 @@ import {
   createProject,
   getProjectById,
   getProjectsByOwner,
-  addMemberToProject,
   updateProject,
 } from "../COLLECTIONS/projects";
 import {
@@ -62,11 +61,6 @@ export const resolvers: IResolvers = {
         owner,
         members
       );
-    },
-
-    addMember: async (_, { projectId, userId }, { user }) => {
-      if (!user) throw new Error("You must be logged in");
-      return addMemberToProject(projectId, userId, user._id.toString());
     },
 
     createTask: async (_, { projectId, input }) => {
