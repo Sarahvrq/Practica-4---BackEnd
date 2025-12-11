@@ -62,7 +62,7 @@ export const resolvers: IResolvers = {
         members
       );
     },
-    
+
     createTask: async (_, { projectId, input }) => {
       const { title, assignedTo, status, priority, dueDate } = input;
       return createTask(

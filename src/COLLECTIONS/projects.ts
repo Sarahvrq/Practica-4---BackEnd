@@ -55,5 +55,5 @@ export const updateProject = async (projectId: string, updates: { name?: string;
   
   const updatedProject = await getProjectById(projectId);
   return updatedProject;
-  
+
 };
