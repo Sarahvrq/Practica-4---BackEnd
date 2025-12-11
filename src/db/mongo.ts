@@ -1,11 +1,10 @@
 import { Db, MongoClient } from "mongodb";
 import dotenv from "dotenv";
-
+import { dbName } from "../utils";
 dotenv.config();
 
 let client: MongoClient;
 let dB: Db;
-const dbName = "Practica4-2526";
 
 export const connectToMongoDB = async () => {
     try{

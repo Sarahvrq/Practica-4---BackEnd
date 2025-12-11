@@ -7,15 +7,15 @@ export const typeDefs = gql`
     username: String!
     email: String!
     password: String!
-    createAt: Date
+    createAt: String!
   }
 
   type Project {
     _id: ID!
     name: String!
     description: String
-    startDate: Date!
-    endDate: Date!
+    startDate: String!
+    endDate: String!
     owner: ID!
     members: [ID!]!
     Tasks: [Task!]!
@@ -40,7 +40,7 @@ export const typeDefs = gql`
     assignedTo: [ID!]!
     status: TASK_status!
     priority: TASK_priority!
-    dueDate: Date!
+    dueDate: String!
 
     }
 
@@ -61,8 +61,8 @@ export const typeDefs = gql`
     input CreateProjectInput {
       name: String!
       description: String
-      startDate: Date!
-      endDate: Date!
+      startDate: String!
+      endDate: String!
       owner: ID!
       members: [ID!]!
     }
@@ -70,8 +70,8 @@ export const typeDefs = gql`
         input UpdateProjectInput {
           name: String
           description: String
-          startDate: Date
-          endDate: Date
+          startDate: String
+          endDate: String
           owner: ID!
           members: [ID!]
         }
@@ -81,7 +81,7 @@ export const typeDefs = gql`
       assignedTo: [ID!]!
       status: TASK_status!
       priority: TASK_priority!
-      dueDate: Date!
+      dueDate: String!
     }
 
         input UpdateTaskInput {
@@ -89,7 +89,7 @@ export const typeDefs = gql`
           assignedTo: [ID!]!
           status: TASK_status!
           priority: TASK_priority!
-          dueDate: Date!
+          dueDate: String!
         }
 
 
@@ -106,7 +106,7 @@ export const typeDefs = gql`
     register(input: RegisterInput!): AuthPayload!
     login(input: LoginInput!): AuthPayload!
 
-    createProject(input: createProject!): Project!
+    createProject(input: CreateProjectInput!): Project!
     updateProject(id: ID!, input: UpdateProjectInput!): Project!
     deleteProject(id: ID!): Boolean!
     addMember(projectId: ID!, userId: ID!): Project!
